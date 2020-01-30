@@ -1,0 +1,125 @@
+<html>
+<head>
+<title>HTML/Javascript Speech Timer</title>
+<script type="text/javascript">
+function changeColor(colorName, showForm) {
+  var styles = ('body { background: ' + colorName + '; }\n' +
+                'form { display: ' + (showForm ? 'block' : 'none') + '; }');
+  document.getElementById('custom-styles').innerHTML = styles;
+}
+
+function parseParams() {
+  var result = {};
+  location.search.substr(1).split('&').forEach(function(token) {
+    var keyVal = token.split('=', 2);
+    result[keyVal[0]] = decodeURIComponent(keyVal[1]);
+  });
+  return result;
+}
+
+function minutesStrToMillis(minutes) {
+  return Math.floor(new Number(minutes) * 60000.0);
+}
+
+function refresh() {
+  location.href = location.href.split('?', 1)[0];
+  return true;
+}
+
+function chooseColor() {
+  params = parseParams();
+  if (params['min_time'] && params['max_time']) {
+    try {
+      var minTime = minutesStrToMillis(params['min_time']);
+      var maxTime = minutesStrToMillis(params['max_time']);
+      if (minTime > 0 && maxTime > minTime) {
+        var warnTime = (maxTime + minTime) / 2.0;
+        var rangeStr = '[' + [minTime, warnTime, maxTime].join('..') + ']';
+        console.log('Starting timer for range (seconds):', rangeStr);
+        changeColor('white', false);
+        window.setTimeout(function() {
+          console.log('Times up!');
+          changeColor('red', false);
+        }, maxTime);
+        window.setTimeout(function() {
+          console.log('Running out of time...');
+          changeColor('yellow', false);
+        }, warnTime);
+        window.setTimeout(function() {
+          console.log('Requirements met.');
+          changeColor('green', false);
+        }, minTime);
+        return;
+      }
+    } catch(error) {
+      console.log('ERROR:', error);
+    }
+  }
+  changeColor('black', true);
+}
+</script>
+<style>
+body {
+  background: black;
+  color: white;
+  padding: 0;
+  margin: 0;
+}
+.center {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+.refresh {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  padding: 20px;
+  font-size: 3.0em;
+  color: black;
+}
+.refresh a {
+  color: black;
+  text-decoration: none;
+}
+form {
+  font-family: sans-serif;
+  font-size: 1.3em;
+}
+input {
+  font-family: sans-serif;
+  font-size: 1.0em;
+  margin: 5px;
+}
+</style>
+<style id="custom-styles" type="text/css">
+  /* Placeholder for generated styles */
+</style>
+</head>
+<body onload="chooseColor()">
+<div class="center">
+  <form>
+    <h1>Simple Speech Timer</h1>
+    <p>Enter the minimum required and maximum allowed times (in
+       minutes) for a speaker and hit the "Go!" button.  When the
+       minimum time has elapsed, this page will turn green.  Midway
+       between the minimum and maximum times, it will turn yellow.
+       Finally, when the maximum allowed time has elapsed, it will
+       turn red.</p>
+    <div style="border: 1px solid white; padding: 10px">
+      <label for="min_time">Minimum time (minutes)</label>
+      <input type="text" name="min_time" id="min_time" value=""><br/>
+      <label for="max_time">Maximum time (minutes)</label>
+      <input type="text" name="max_time" id="max_time" value=""><br/>
+      <input type="submit" value="Go!"></input>
+    </div>
+  </form>
+</div>
+<div class="refresh">
+  <a href="#" onclick="refresh()">&#9851;</a>
+</div>
+</body>
+</html>
