@@ -61,7 +61,7 @@ function chooseColor() {
 <style>
 body {
   background: black;
-  color: white;
+  color: #ccc;
   padding: 0;
   margin: 0;
   font-size: 16pt;
@@ -82,7 +82,10 @@ body {
   color: black;
   font-size: 10vh;
   font-size: max(10vh, 10vw);
-  opacity: 0.5;
+  opacity: 0.1;
+}
+p {
+  text-align: justify;
 }
 a {
   color: inherit;
@@ -91,10 +94,20 @@ a {
 form {
   font-family: sans-serif;
 }
+.form-inputs {
+  border-radius: 10px;
+  background: #222;
+  padding: 20px;
+}
 input {
   font-family: sans-serif;
   font-size: 1.1em;
+  background: black;
+  color: #ccc;
   margin: 5px;
+}
+small {
+  font-size: 0.7em;
 }
 </style>
 <style id="custom-styles" type="text/css">
@@ -105,13 +118,15 @@ input {
 <div class="center">
   <form>
     <h1>Simple Speech Timer</h1>
-    <p>Enter the minimum required and maximum allowed times (in
-       minutes) for a speaker and hit the "Go!" button.  When the
-       minimum time has elapsed, this page will turn green.  Midway
-       between the minimum and maximum times, it will turn yellow.
-       Finally, when the maximum allowed time has elapsed, it will
-       turn red.</p>
-    <div style="border: 1px solid white; padding: 10px">
+
+    <p>Enter the minimum required and maximum allowed times for a
+       speaker and hit the "Go!" button.  When the minimum time has
+       elapsed, this page will turn green.  Midway between the minimum
+       and maximum times, it will turn yellow.  Finally, when the
+       maximum allowed time has elapsed, it will turn red.</p>
+    <p><strong>Times should be entered as decimal minutes</strong>.
+       <em>(E.g., enter "7.5" for seven minutes and thirty seconds.</em>)</p>
+    <div class="form-inputs">
       <label for="min_time">Minimum time (minutes)</label>
       <input type="text" name="min_time" id="min_time" value=""><br/>
       <label for="max_time">Maximum time (minutes)</label>
