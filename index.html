@@ -50,10 +50,14 @@ function chooseColor() {
           changeColor('green', false);
         }, minTime);
         return;
+      } else {
+        console.log('Invalid time range');
       }
     } catch(error) {
       console.log('ERROR:', error);
     }
+  } else {
+    console.log('No time range specified');
   }
   changeColor('black', true);
 }
