@@ -22,7 +22,14 @@ function parseParams() {
 }
 
 function minutesStrToMillis(minutes) {
-  return Math.floor(new Number(minutes) * 60000.0);
+  minutes = minutes.trim();
+  minSecs = minutes.match(/^([0-9]*):([0-5][0-9])$/);
+  if (minSecs) {
+    minutes = new Number(minSecs[1]) + (new Number(minSecs[2]) / 60.0);
+  } else {
+    minutes = new Number(minutes);
+  }
+  return Math.floor(minutes * 60000.0);
 }
 
 function refresh() {
@@ -39,18 +46,15 @@ function setState() {
       if (minTime >= 0 && maxTime > minTime) {
         var warnTime = (maxTime + minTime) / 2.0;
         var rangeStr = '[' + [minTime, warnTime, maxTime].join('..') + ']';
-        console.log('Starting timer for range (seconds):', rangeStr);
+        console.log('Starting timer for range (ms):', rangeStr);
         changeState('white');
         window.setTimeout(function() {
-          console.log('Times up!');
           changeState('red');
         }, maxTime);
         window.setTimeout(function() {
-          console.log('Running out of time...');
           changeState('yellow');
         }, warnTime);
         window.setTimeout(function() {
-          console.log('Requirements met.');
           changeState('green');
         }, minTime);
         return;
@@ -181,8 +185,9 @@ body.init form {
        elapsed, this page will turn green.  Midway between the minimum
        and maximum times, it will turn yellow.  Finally, when the
        maximum allowed time has elapsed, it will turn red.</p>
-    <p><strong>Times should be entered as decimal minutes</strong>.
-       <em>(E.g., enter "7.5" for seven minutes and thirty seconds.</em>)</p>
+    <p>Times may be entered as decimal minutes (<em>5, 7.5,
+       10.25, &hellip;</em>) or in MM:SS format (<em>5, 7:30,
+       10:15, &hellip;</em>).
     <div class="form-inputs">
       <label for="min_time">Minimum time (minutes)</label>
       <input type="text" name="min_time" id="min_time" value=""><br/>
