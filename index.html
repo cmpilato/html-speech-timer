@@ -36,7 +36,7 @@ function setState() {
     try {
       var minTime = minutesStrToMillis(params['min_time']);
       var maxTime = minutesStrToMillis(params['max_time']);
-      if (minTime > 0 && maxTime > minTime) {
+      if (minTime >= 0 && maxTime > minTime) {
         var warnTime = (maxTime + minTime) / 2.0;
         var rangeStr = '[' + [minTime, warnTime, maxTime].join('..') + ']';
         console.log('Starting timer for range (seconds):', rangeStr);
